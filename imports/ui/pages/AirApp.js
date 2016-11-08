@@ -35,7 +35,7 @@ const styles = {
 const iconstyle = {margin: 5};
 const buttonstyle = {margin:12};
 
-class ParkingApp extends React.Component {
+class AirApp extends React.Component {
   constructor(props) {
     super(props);
 
@@ -380,9 +380,9 @@ class ParkingApp extends React.Component {
   }
 }
 
-ParkingApp.propTypes = {
+AirApp.propTypes = {
   data: React.PropTypes.array.isRequired,
 };
 
-export default ParkingApp;
+export default AirApp;
 
