@@ -37,7 +37,7 @@ FlowRouter.route("/", {
     mount(Layout, {
       content: function () {
         return <AirAppData
-                resourceId={Meteor.settings.public.parkingTableLatest}
+                resourceId={Meteor.settings.public.airTableLatest}
                 options={{ sort: { ID: -1 }}}/> ;
       }
     });

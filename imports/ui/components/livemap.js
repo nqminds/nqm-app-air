@@ -35,10 +35,10 @@ class Livemap extends React.Component {
         let self = this;
         let markerComponent = null;
 
-        if (!_.isEmpty(self.props.parkingMetadata)) {
+        if (!_.isEmpty(self.props.metaData)) {
             markerComponent =
                 <MarkerCluster
-                    parkingMetadata={self.props.parkingMetadata}
+                    metaData={self.props.metaData}
                     realTimeData={self.props.realTimeData}
                     onClickMarker={self.props.onClickMarker}
                 />
@@ -65,7 +65,7 @@ class Livemap extends React.Component {
 
 Livemap.propTypes = {
     centerPosition: React.PropTypes.object.isRequired,
-    parkingMetadata: React.PropTypes.object.isRequired,
+    metaData: React.PropTypes.object.isRequired,
     realTimeData: React.PropTypes.array.isRequired,
     onClickMarker: React.PropTypes.func.isRequired,
 };

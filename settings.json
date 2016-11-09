@@ -4,10 +4,9 @@
 		"authServerURL": "https://tdx.nq-m.com",
     	"commandHost": "https://cmd.nq-m.com",
     	"queryHost": "https://q.nq-m.com",
-		"liveFeedSubscribtion": "ryx3CWlqxx",		
-		"parkingMetadata": "Sylbgv671l",
-		"parkingTable":"rJlTphTNyg",
-		"parkingTableLatest":"rJg-KXco1x",
+		"airMetadata": "SJl6UvIUJl",
+		"airTable":"",
+		"airTableLatest":"SJl1npVkZl",
 		"sharedKeyFile": "nqm-wideaccess-key.js",
 		"showAppBar": false
 	}

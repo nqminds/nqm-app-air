@@ -24,21 +24,10 @@ class AirApp extends React.Component {
       accessToken: connectionManager.authToken
     });
 
-    
-    let date = new Date();
-    
-    date.setHours(0);
-    date.setMinutes(0);
-    date.setSeconds(0);
-    date.setMilliseconds(0);
-    
-    const currentMarker = {LotCode:0};
     this.state = {
-      currentMarker:currentMarker,
       snackBarMessage:"",
-      snackBarOpen: false,      
-      filterDate: date,
-      parkingMetadata: {},
+      snackBarOpen: false,
+      airMetadata: {},
       chartType: "Line"
     };
   }
@@ -52,32 +41,30 @@ class AirApp extends React.Component {
       snackBarOpen: false
     });
   };
-  
-  componentWillMount() {
-    let parkingMetadata = {};
 
-    this.tdxApi.getDatasetData(Meteor.settings.public.parkingMetadata, null, null, null, (err, data)=>{
+  componentWillMount() {
+    let airMetadata = {};
+
+    this.tdxApi.getDatasetData(Meteor.settings.public.airMetadata, null, null, null, (err, data)=>{
       if (err) {
         this.setState({
           snackBarOpen: true,
-          snackBarMessage: "No parking metadata available!"
+          snackBarMessage: "No air metadata available!"
         });  
       } else {
         if (!data.data.length){
           this.setState({
             snackBarOpen: true,
-            snackBarMessage: "No parking metadata available!"
+            snackBarMessage: "No air metadata available!"
           });          
         } else {
-          let minMarker = _.minBy(data.data,(val)=>{return val.LotCode});
 
           _.forEach(data.data, (val)=>{
-            parkingMetadata[val.LotCode] = val;
+            airMetadata[val.SiteCode] = val;
           });
 
           this.setState({
-            'currentMarker':minMarker,
-            'parkingMetadata': parkingMetadata
+            'airMetadata': airMetadata
           });
         }
       }
@@ -85,30 +72,9 @@ class AirApp extends React.Component {
   }
 
   componentDidMount() {
-    let currentLiveFeed = {};
-
-    this.tdxApi.getDatasetData(Meteor.settings.public.liveFeedSubscribtion, null, null, null, (err, data)=>{
-      if(err) {
-        this.setState({
-          snackBarOpen: true,
-          snackBarMessage: "Can't retrieve the live feed data!"
-        });
-      } else {
-          _.forEach(data.data, (val)=>{
-            currentLiveFeed[val.ID] = val.state;
-          });
-
-          this.setState({ liveFeed: currentLiveFeed });
-      }
-    });
   }
 
   render() {
-    const gte = this.state.filterDate.getTime();
-    const lte = gte + 24*60*60*1000;
-    
-    const chartOptions = { sort: { timestamp: 1 }};
-    const chartFilter = {ID: {$eq: this.state.currentMarker.LotCode}, "$and":[{"timestamp":{"$gte":gte}},{"timestamp":{"$lte":lte}}]};
     let cPos = L.latLng(52.008778, -0.771088);
 
     const appBarHeight = Meteor.settings.public.showAppBar !== false ? 50 : 0;
@@ -124,15 +90,21 @@ class AirApp extends React.Component {
         right: 0
       }
     };
+    let liveMap = null;
 
-    return (
-      <div style={styles.mainPanel}>
-        <Livemap
-          parkingMetadata={this.state.parkingMetadata}
+    if (!_.isEmpty(this.state.airMetadata)) {
+      liveMap =
+        (<Livemap
+          metaData={this.state.airMetadata}
           realTimeData={this.props.data}
           onClickMarker={this._onClickMarker.bind(this)}
           centerPosition={cPos}
-        />
+        />);  
+    }
+
+    return (
+      <div style={styles.mainPanel}>
+        {liveMap}
         <Snackbar
           open={this.state.snackBarOpen}
           message={this.state.snackBarMessage}

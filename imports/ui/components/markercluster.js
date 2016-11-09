@@ -14,23 +14,23 @@ class MarkerCluster extends MapLayer {
         let self = this;
         this.leafletElement = L.markerClusterGroup();
         
-        if (!_.isEmpty(this.props.parkingMetadata)) {
-            markers = _.map(this.props.parkingMetadata, (val,key)=>{
-                this._markers[Number(val.LotCode)] = L.marker(new L.LatLng(val.Latitude, val.Longitude), {
-                    title: val.Street,
+        if (!_.isEmpty(this.props.metaData)) {
+            markers = _.map(this.props.metaData, (val,key)=>{
+                this._markers[val.SiteCode] = L.marker(new L.LatLng(val.Latitude, val.Longitude), {
+                    title: val.LocalAuthorityName,
                     icon: new L.TextIcon({
-                        text: val.BayCount.toString(),
+                        text: '1',
                         color: 'blue',
-                        id: Number(val.LotCode)
+                        id: val.SiteCode
                     })
                 });
-                
-                this._markers[Number(val.LotCode)].bindPopup(
-                    "<b>Street name: </b>"+val.Street+"<br>"+
-                    "<b>Bay type: </b>"+val.BayType+"<br>"+
-                    "<b>Tarrif code:</b>"+val.TariffCode+"<br>"+
-                    "<b>Bay count:</b>"+val.BayCount).on('click', (e) => {self.props.onClickMarker(e.target.options.icon.options.id)});
-                return this._markers[Number(val.LotCode)];
+
+                this._markers[val.SiteCode].bindPopup(
+                    "<b>Local authority name: </b>"+val.LocalAuthorityName+"<br>"+
+                    "<b>Site code: </b>"+val.SiteCode+"<br>"+
+                    "<b>Local authority code: </b>"+val.LocalAuthorityCode+"<br>"+
+                    "<b>Site type:</b>"+val.SiteType).on('click', (e) => {self.props.onClickMarker(e.target.options.icon.options.id)});
+                return this._markers[val.SiteCode];
             });
 
             this.leafletElement.addLayers(markers);
@@ -38,10 +38,12 @@ class MarkerCluster extends MapLayer {
     }
 
     componentWillReceiveProps(nextProps) {
+        console.log(nextProps.realTimeData);
+
         _.forEach(nextProps.realTimeData, (val)=>{
-            let color = Number(val.currentvalue)?'blue':'red';
-            this._markers[Number(val.ID)].options.icon.setColor(color);
-            this._markers[Number(val.ID)].options.icon.setText(val.currentvalue.toString());    
+            let color = 'blue';//Number(val.currentvalue)?'blue':'red';
+            this._markers[val.SiteCode].options.icon.setColor(color);
+            this._markers[val.SiteCode].options.icon.setText('1');    
         });
     }
 
@@ -55,7 +57,7 @@ class MarkerCluster extends MapLayer {
 }
 
 MarkerCluster.propTypes = {
-    parkingMetadata: React.PropTypes.object.isRequired,
+    metaData: React.PropTypes.object.isRequired,
     realTimeData: React.PropTypes.array.isRequired,
     onClickMarker: React.PropTypes.func.isRequired
 };
