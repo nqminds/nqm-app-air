@@ -11,7 +11,6 @@ import * as _ from "lodash";
 import TDXAPI from "nqm-api-tdx/client-api";
 
 import Livemap from "../components/livemap"
-import ChartContainer from "./chart-container"
 import connectionManager from "../../api/manager/connection-manager";
 
 class AirApp extends React.Component {
@@ -75,8 +74,6 @@ class AirApp extends React.Component {
   }
 
   render() {
-    let cPos = L.latLng(52.008778, -0.771088);
-
     const appBarHeight = Meteor.settings.public.showAppBar !== false ? 50 : 0;
     const styles = {
       root: {
@@ -98,7 +95,6 @@ class AirApp extends React.Component {
           metaData={this.state.airMetadata}
           realTimeData={this.props.data}
           onClickMarker={this._onClickMarker.bind(this)}
-          centerPosition={cPos}
         />);  
     }
 

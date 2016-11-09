@@ -7,9 +7,12 @@ https://github.com/Leaflet/Leaflet.markercluster#usage
 
 import React from "react";
 import ReactDOM from 'react-dom';
-import { Map, TileLayer, Marker, Popup, LayerGroup, Circle } from 'react-leaflet';
+import Paper from 'material-ui/Paper';
+import Control from 'react-leaflet-control';
+import { Map, TileLayer, Marker, Popup, LayerGroup, ZoomControl } from 'react-leaflet';
 import MarkerCluster from "./markercluster"
- 
+import Chart from "./chart";
+
 const defaultData = [{ lat: 52.008778, lon: -0.771088}];
 
 class Livemap extends React.Component {
@@ -22,18 +25,29 @@ class Livemap extends React.Component {
     }
 
     componentWillMount() {
-        if (this.props.centerPosition!=null)
-            this.setState({centerPosition: this.props.centerPosition});
+        let bounds = L.latLngBounds(_.map(this.props.metaData, (val, key)=>{
+            return L.latLng(val.Latitude, val.Longitude);
+        }));
+
+        this.setState({
+            centerPosition: bounds.getCenter()
+        });
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.centerPosition!=null)
-            this.setState({centerPosition: nextProps.centerPosition})
     }
     
     render() {
         let self = this;
         let markerComponent = null;
+
+        const style = {
+            height: 100,
+            width: 100,
+            margin: 20,
+            textAlign: 'center',
+            display: 'inline-block',
+        };
 
         if (!_.isEmpty(self.props.metaData)) {
             markerComponent =
@@ -48,23 +62,30 @@ class Livemap extends React.Component {
         return (
             <Map
                 center={this.state.centerPosition}
-                zoom={18}
+                zoom={11}
                 scrollWheelZoom={false}
                 touchZoom={false}
                 maxBounds={null}
                 dragging={true}
+                zoomControl={false}
             >
                 <TileLayer
                     url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 />
                 {markerComponent}
+                <ZoomControl position='bottomright' />
+                <Control position="topright" >
+                    <div className="chartinfo">
+                        <Chart data={[]} type={"Line"} barcount={3}/>
+                        <Chart data={[]} type={"Bar"} barcount={3}/>
+                    </div>
+                </Control>
             </Map>);
     }
 }
 
 Livemap.propTypes = {
-    centerPosition: React.PropTypes.object.isRequired,
     metaData: React.PropTypes.object.isRequired,
     realTimeData: React.PropTypes.array.isRequired,
     onClickMarker: React.PropTypes.func.isRequired,
