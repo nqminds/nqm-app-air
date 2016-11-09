@@ -4,6 +4,7 @@ import React from "react";
 import ReactDOM from 'react-dom';
 import {Meteor} from "meteor/meteor";
 import { blue900, blue100 } from 'material-ui/styles/colors';
+import Snackbar from 'material-ui/Snackbar';
 import 'leaflet';
 import 'leaflet.markercluster';
 import * as _ from "lodash";
@@ -34,6 +35,8 @@ class AirApp extends React.Component {
     const currentMarker = {LotCode:0};
     this.state = {
       currentMarker:currentMarker,
+      snackBarMessage:"",
+      snackBarOpen: false,      
       filterDate: date,
       parkingMetadata: {},
       chartType: "Line"
@@ -44,6 +47,12 @@ class AirApp extends React.Component {
   
   }
 
+  handleSnackbarClose() {
+    this.setState({
+      snackBarOpen: false
+    });
+  };
+  
   componentWillMount() {
     let parkingMetadata = {};
 
@@ -123,6 +132,12 @@ class AirApp extends React.Component {
           realTimeData={this.props.data}
           onClickMarker={this._onClickMarker.bind(this)}
           centerPosition={cPos}
+        />
+        <Snackbar
+          open={this.state.snackBarOpen}
+          message={this.state.snackBarMessage}
+          autoHideDuration={4000}
+          onRequestClose={this.handleSnackbarClose.bind(this)}
         />
       </div>
     );
