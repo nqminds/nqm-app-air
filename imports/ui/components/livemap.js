@@ -52,6 +52,7 @@ class Livemap extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        console.log(nextProps.data);
     }
     
     handleMoleculeChange(event, index, value){
@@ -73,7 +74,11 @@ class Livemap extends React.Component {
     }
 
     _onClickMarker(id) {
-        console.log(id);
+        const gte = this.state.filterDate.getTime();
+        const lte = gte + 24*60*60*1000;
+
+        if (this.state.moleculeIndex!=1)
+            this.props.onUpdatePlot(id, [gte, lte]);
     }
 
     render() {
@@ -161,7 +166,9 @@ class Livemap extends React.Component {
 
 Livemap.propTypes = {
     metaData: React.PropTypes.object.isRequired,
-    realTimeData: React.PropTypes.array.isRequired
+    realTimeData: React.PropTypes.array.isRequired,
+    onUpdatePlot: React.PropTypes.func.isRequired,
+    data: React.PropTypes.array.isRequired
 };
 
 Livemap.contextTypes = {

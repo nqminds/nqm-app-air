@@ -10,7 +10,7 @@ import 'leaflet.markercluster';
 import * as _ from "lodash";
 import TDXAPI from "nqm-api-tdx/client-api";
 
-import Livemap from "../components/livemap"
+import LivemapContainer from "./livemap-container"
 import connectionManager from "../../api/manager/connection-manager";
 
 class AirApp extends React.Component {
@@ -27,8 +27,17 @@ class AirApp extends React.Component {
       snackBarMessage:"",
       snackBarOpen: false,
       airMetadata: {},
-      chartType: "Line"
+      chartType: "Line",
+      siteCode: null,
+      timestampBounds: [0,0] 
     };
+  }
+
+  _onUpdatePlot(id, timeBounds) {
+    this.setState({
+      siteCode: id,
+      timestampBounds: timeBounds
+    });
   }
 
   handleSnackbarClose() {
@@ -83,16 +92,28 @@ class AirApp extends React.Component {
         right: 0
       }
     };
+
+    const resourceLoad = (this.state.siteCode!=null) ? true : false;
+    const resourceOptions = { sort: { timestamp: 1 }};
+    const resourceFilter = {SiteCode: {$eq: this.state.siteCode},
+                                "$and":[{"timestamp":{"$gte":this.state.timestampBounds[0]}},
+                                        {"timestamp":{"$lte":this.state.timestampBounds[1]}}]};
+    
     let liveMap = null;
 
     if (!_.isEmpty(this.state.airMetadata)) {
       liveMap =
-        (<Livemap
+        (<LivemapContainer
+          resourceId={Meteor.settings.public.airTable}
+          filter={resourceFilter}
+          options={resourceOptions}
+          load={resourceLoad}
           metaData={this.state.airMetadata}
           realTimeData={this.props.data}
+          onUpdatePlot={this._onUpdatePlot.bind(this)}
         />);  
     }
-
+    
     return (
       <div style={styles.mainPanel}>
         {liveMap}
