@@ -2,8 +2,11 @@
 	L.TextIcon = L.Icon.extend({
 		options: L.extend({
 			className: 'leaflet-div-icon',
-			getIconUrl: function(color) {
-				return '/images/marker-hole-'+ (color || 'blue') +'.svg' 
+			getIconUrl: function(icontype, color) {
+				if (icontype=='plain')
+					return '/images/marker-icon.png'
+				else if (icontype=='number') 
+					return '/images/marker-hole-'+ (color || 'blue') +'.svg' 
 			},
 			shadowUrl:""
 		}, new L.Icon.Default().options),
@@ -15,7 +18,7 @@
 	 		});
 			
 	 		L.setOptions(this, options);
-	 		var iconUrl = this.options.getIconUrl(this.options.color);
+	 		var iconUrl = this.options.getIconUrl(this.options.icontype, this.options.color);
 	 		this._iconImg = this._createImg(iconUrl);
 
 			this._textDiv = document.createElement('div');
@@ -31,11 +34,10 @@
 			this._setIconStyles(div, 'icon');
 			return div;
 		},
-		setColor: function(color) {
-			this._iconImg.src = this.options.getIconUrl(color);
-		},
-		setText: function(text) {
-			this._textDiv.innerHTML = text || '';
+		setType: function(icontype, color, text) {
+			let icontext = (icontype == 'plain')?'':text;
+			this._iconImg.src = this.options.getIconUrl(icontype, color);
+			this._textDiv.innerHTML = icontext || '';
 		}
 	});	
 }());

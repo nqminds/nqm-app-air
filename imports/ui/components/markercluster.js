@@ -19,7 +19,8 @@ class MarkerCluster extends MapLayer {
                 this._markers[val.SiteCode] = L.marker(new L.LatLng(val.Latitude, val.Longitude), {
                     title: val.LocalAuthorityName,
                     icon: new L.TextIcon({
-                        text: '1',
+                        icontype: 'plain',
+                        text: '',
                         color: 'blue',
                         id: val.SiteCode
                     })
@@ -38,12 +39,21 @@ class MarkerCluster extends MapLayer {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps.realTimeData);
 
         _.forEach(nextProps.realTimeData, (val)=>{
-            let color = 'blue';//Number(val.currentvalue)?'blue':'red';
-            this._markers[val.SiteCode].options.icon.setColor(color);
-            this._markers[val.SiteCode].options.icon.setText('1');    
+            let color = 'blue';
+            let mtext;
+            let icontype = "plain";
+
+            if (val.Species[nextProps.moleculeType]!=undefined) {
+                icontype = 'number';
+                mtext = val.Species[nextProps.moleculeType].toString();
+                if (val.Species[nextProps.moleculeType]>5)
+                    color = 'red';
+            }
+s
+            this._markers[val.SiteCode].options.icon.setType(icontype, color, mtext);
+             
         });
     }
 

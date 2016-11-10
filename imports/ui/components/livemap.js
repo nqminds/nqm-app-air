@@ -85,6 +85,7 @@ class Livemap extends React.Component {
         };
 
         if (!_.isEmpty(self.props.metaData)) {
+            
             markerComponent =
                 <MarkerCluster
                     moleculeType={molecules[this.state.moleculeIndex]}
