@@ -124,10 +124,20 @@ class Livemap extends React.Component {
                     <div className="chartinfo">
                         <div className="flex-container-column">
                             <div className="lex-items-column">
-                                <Chart data={[]} type={"Line"} barcount={3}/>
+                                <Chart
+                                    moleculeType={molecules[this.state.moleculeIndex]}
+                                    data={this.props.data}
+                                    type={"Line"}
+                                    barcount={10}
+                                />
                             </div>
                             <div className="lex-items-column">
-                                <Chart data={[]} type={"Bar"} barcount={3}/>
+                                <Chart
+                                    moleculeType={molecules[this.state.moleculeIndex]}
+                                    data={this.props.data}
+                                    type={"Bar"}
+                                    barcount={10}
+                                />
                             </div>
                             <div className="lex-items-column">
                                 <MuiThemeProvider muiTheme={this.context.muiTheme}>
