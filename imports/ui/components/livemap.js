@@ -12,25 +12,32 @@ import Control from 'react-leaflet-control';
 import { Map, TileLayer, Marker, Popup, LayerGroup, ZoomControl } from 'react-leaflet';
 import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
-import FontIcon from 'material-ui/FontIcon';
 import MenuItem from 'material-ui/MenuItem';
 import DropDownMenu from 'material-ui/DropDownMenu';
-import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import NavigationExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-more';
+import DatePicker from 'material-ui/DatePicker';
 import MarkerCluster from "./markercluster"
 import Chart from "./chart";
 
 const defaultData = [{ lat: 52.008778, lon: -0.771088}];
+const molecules = {1:'All', 2:'NO2', 3:'SO2', 4:'PM10', 5:'PM25', 6:'O3'};
 
 class Livemap extends React.Component {
     constructor(props) {
         super(props);
 
+        let date = new Date();
+    
+        date.setHours(0);
+        date.setMinutes(0);
+        date.setSeconds(0);
+        date.setMilliseconds(0);
+
         this.state = {
             centerPosition: L.latLng(defaultData[0], defaultData[1]),
-            moleculeIndex: 1
+            moleculeIndex: 1,
+            mapType: 1,
+            filterDate: date,
         };
     }
 
@@ -47,10 +54,22 @@ class Livemap extends React.Component {
     componentWillReceiveProps(nextProps) {
     }
     
-    handleMolecule(event, index, value){
+    handleMoleculeChange(event, index, value){
         this.setState({
             moleculeIndex: value
         })
+    }
+
+    handleMapType(event, index, value){
+        this.setState({
+            mapType: value
+        })
+    }
+
+    handleDateChange(event, date) {
+        this.setState({
+            filterDate: date,
+        });        
     }
 
     render() {
@@ -68,6 +87,7 @@ class Livemap extends React.Component {
         if (!_.isEmpty(self.props.metaData)) {
             markerComponent =
                 <MarkerCluster
+                    moleculeType={molecules[this.state.moleculeIndex]}
                     metaData={self.props.metaData}
                     realTimeData={self.props.realTimeData}
                     onClickMarker={self.props.onClickMarker}
@@ -92,20 +112,40 @@ class Livemap extends React.Component {
                 <ZoomControl position='bottomright' />
                 <Control position="topright" >
                     <div className="chartinfo">
-                        <Chart data={[]} type={"Line"} barcount={3}/>
-                        <Chart data={[]} type={"Bar"} barcount={3}/>
+                        <div className="flex-container-column">
+                            <div className="lex-items-column">
+                                <Chart data={[]} type={"Line"} barcount={3}/>
+                            </div>
+                            <div className="lex-items-column">
+                                <Chart data={[]} type={"Bar"} barcount={3}/>
+                            </div>
+                            <div className="lex-items-column">
+                                <MuiThemeProvider muiTheme={this.context.muiTheme}>
+                                    <DatePicker
+                                        floatingLabelText="Filter Date"
+                                        hintText="Filter date"
+                                        value={this.state.filterDate}
+                                        onChange={this.handleDateChange.bind(this)}
+                                    />
+                                </MuiThemeProvider>
+                            </div>
+                        </div>
                     </div>
                 </Control>
                 <Control position="topleft" >
                     <MuiThemeProvider muiTheme={this.context.muiTheme}>
                         <div className="chartinfo">
-                            <DropDownMenu value={this.state.moleculeIndex} onChange={this.handleMolecule.bind(this)}>
-                                <MenuItem value={1} primaryText="All" />
-                                <MenuItem value={2} primaryText="NO2" />
-                                <MenuItem value={3} primaryText="SO2" />
-                                <MenuItem value={4} primaryText="PM10" />
-                                <MenuItem value={5} primaryText="PM25" />
-                                <MenuItem value={6} primaryText="O3" />
+                            <DropDownMenu value={this.state.moleculeIndex} onChange={this.handleMoleculeChange.bind(this)}>
+                                <MenuItem value={1} primaryText={molecules[1]} />
+                                <MenuItem value={2} primaryText={molecules[2]} />
+                                <MenuItem value={3} primaryText={molecules[3]} />
+                                <MenuItem value={4} primaryText={molecules[4]} />
+                                <MenuItem value={5} primaryText={molecules[5]} />
+                                <MenuItem value={6} primaryText={molecules[6]} />
+                            </DropDownMenu>
+                            <DropDownMenu value={this.state.mapType} onChange={this.handleMapType.bind(this)}>
+                                <MenuItem value={1} primaryText="Sensor Map" />
+                                <MenuItem value={2} primaryText="Heat Map" />
                             </DropDownMenu>
                         </div>
                     </MuiThemeProvider>

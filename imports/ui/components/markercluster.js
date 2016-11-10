@@ -57,6 +57,7 @@ class MarkerCluster extends MapLayer {
 }
 
 MarkerCluster.propTypes = {
+    moleculeType: React.PropTypes.string.isRequired, 
     metaData: React.PropTypes.object.isRequired,
     realTimeData: React.PropTypes.array.isRequired,
     onClickMarker: React.PropTypes.func.isRequired
