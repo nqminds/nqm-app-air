@@ -51,7 +51,7 @@ class MarkerCluster extends MapLayer {
                 if (val.Species[nextProps.moleculeType]>5)
                     color = 'red';
             }
-s
+            
             this._markers[val.SiteCode].options.icon.setType(icontype, color, mtext);
              
         });

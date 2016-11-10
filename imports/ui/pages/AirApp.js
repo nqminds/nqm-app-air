@@ -31,10 +31,6 @@ class AirApp extends React.Component {
     };
   }
 
-  _onClickMarker(id) {
-  
-  }
-
   handleSnackbarClose() {
     this.setState({
       snackBarOpen: false
@@ -94,7 +90,6 @@ class AirApp extends React.Component {
         (<Livemap
           metaData={this.state.airMetadata}
           realTimeData={this.props.data}
-          onClickMarker={this._onClickMarker.bind(this)}
         />);  
     }
 

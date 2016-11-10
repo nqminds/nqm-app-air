@@ -72,6 +72,10 @@ class Livemap extends React.Component {
         });        
     }
 
+    _onClickMarker(id) {
+        console.log(id);
+    }
+
     render() {
         let self = this;
         let markerComponent = null;
@@ -91,7 +95,7 @@ class Livemap extends React.Component {
                     moleculeType={molecules[this.state.moleculeIndex]}
                     metaData={self.props.metaData}
                     realTimeData={self.props.realTimeData}
-                    onClickMarker={self.props.onClickMarker}
+                    onClickMarker={this._onClickMarker.bind(this)}
                 />
         }
 
@@ -157,8 +161,7 @@ class Livemap extends React.Component {
 
 Livemap.propTypes = {
     metaData: React.PropTypes.object.isRequired,
-    realTimeData: React.PropTypes.array.isRequired,
-    onClickMarker: React.PropTypes.func.isRequired,
+    realTimeData: React.PropTypes.array.isRequired
 };
 
 Livemap.contextTypes = {
