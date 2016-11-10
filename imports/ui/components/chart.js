@@ -29,7 +29,6 @@ class Chart extends React.Component {
                  undef = true;
         }
         
-        console.log(undef);
         if (this.props.type=="Line") {
             
             className = "ct-line-chart"

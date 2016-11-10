@@ -27,7 +27,9 @@ class Livemap extends React.Component {
         super(props);
 
         let date = new Date();
-    
+        
+        this.markerID = null;
+
         date.setHours(0);
         date.setMinutes(0);
         date.setSeconds(0);
@@ -52,7 +54,6 @@ class Livemap extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps.data);
     }
     
     handleMoleculeChange(event, index, value){
@@ -70,12 +71,17 @@ class Livemap extends React.Component {
     handleDateChange(event, date) {
         this.setState({
             filterDate: date,
-        });        
+        });
+        
+        if (this.markerID!=null)
+            this._onClickMarker(this.markerID);
     }
 
     _onClickMarker(id) {
         const gte = this.state.filterDate.getTime();
         const lte = gte + 24*60*60*1000;
+
+        this.markerID = id;
 
         if (this.state.moleculeIndex!=1)
             this.props.onUpdatePlot(id, [gte, lte]);
