@@ -10,6 +10,15 @@ import ReactDOM from 'react-dom';
 import Paper from 'material-ui/Paper';
 import Control from 'react-leaflet-control';
 import { Map, TileLayer, Marker, Popup, LayerGroup, ZoomControl } from 'react-leaflet';
+import IconMenu from 'material-ui/IconMenu';
+import IconButton from 'material-ui/IconButton';
+import FontIcon from 'material-ui/FontIcon';
+import MenuItem from 'material-ui/MenuItem';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import NavigationExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-more';
 import MarkerCluster from "./markercluster"
 import Chart from "./chart";
 
@@ -20,7 +29,8 @@ class Livemap extends React.Component {
         super(props);
 
         this.state = {
-            centerPosition: L.latLng(defaultData[0], defaultData[1])
+            centerPosition: L.latLng(defaultData[0], defaultData[1]),
+            moleculeIndex: 1
         };
     }
 
@@ -37,6 +47,12 @@ class Livemap extends React.Component {
     componentWillReceiveProps(nextProps) {
     }
     
+    handleMolecule(event, index, value){
+        this.setState({
+            moleculeIndex: value
+        })
+    }
+
     render() {
         let self = this;
         let markerComponent = null;
@@ -57,7 +73,6 @@ class Livemap extends React.Component {
                     onClickMarker={self.props.onClickMarker}
                 />
         }
-
 
         return (
             <Map
@@ -81,6 +96,20 @@ class Livemap extends React.Component {
                         <Chart data={[]} type={"Bar"} barcount={3}/>
                     </div>
                 </Control>
+                <Control position="topleft" >
+                    <MuiThemeProvider muiTheme={this.context.muiTheme}>
+                        <div className="chartinfo">
+                            <DropDownMenu value={this.state.moleculeIndex} onChange={this.handleMolecule.bind(this)}>
+                                <MenuItem value={1} primaryText="All" />
+                                <MenuItem value={2} primaryText="NO2" />
+                                <MenuItem value={3} primaryText="SO2" />
+                                <MenuItem value={4} primaryText="PM10" />
+                                <MenuItem value={5} primaryText="PM25" />
+                                <MenuItem value={6} primaryText="O3" />
+                            </DropDownMenu>
+                        </div>
+                    </MuiThemeProvider>
+                </Control>
             </Map>);
     }
 }
@@ -89,6 +118,10 @@ Livemap.propTypes = {
     metaData: React.PropTypes.object.isRequired,
     realTimeData: React.PropTypes.array.isRequired,
     onClickMarker: React.PropTypes.func.isRequired,
+};
+
+Livemap.contextTypes = {
+  muiTheme: React.PropTypes.object
 };
 
 export default Livemap;

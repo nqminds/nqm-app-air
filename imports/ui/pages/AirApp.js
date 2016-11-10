@@ -116,4 +116,8 @@ AirApp.propTypes = {
   data: React.PropTypes.array.isRequired,
 };
 
+AirApp.contextTypes = {
+  muiTheme: React.PropTypes.object
+};
+
 export default AirApp;

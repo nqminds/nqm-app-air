@@ -30,6 +30,13 @@ class Layout extends React.Component{
     this._onLogout = this._onLogout.bind(this);
     this._onUserPassword = this._onUserPassword.bind(this);
   }
+
+  getChildContext() { 
+    return {
+      muiTheme: muiTheme
+    };
+  }
+
   _onUserPassword(user, password) {
     // Pass share credentials on to the connection manager.
     connectionManager.authorise(user, password);
@@ -96,5 +103,9 @@ class Layout extends React.Component{
     );    
   }
 }
+
+Layout.childContextTypes = {
+  muiTheme: React.PropTypes.object
+};
 
 export default Layout;
