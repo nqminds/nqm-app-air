@@ -72,7 +72,7 @@ class Livemap extends React.Component {
         this.setState({
             filterDate: date,
         });
-        
+
         if (this.markerID!=null)
             this._onClickMarker(this.markerID);
     }
