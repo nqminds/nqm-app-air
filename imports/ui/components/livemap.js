@@ -143,7 +143,12 @@ class Livemap extends React.Component {
                     </div>
                 </Control>);
         } else if (!_.isEmpty(self.props.metaData) && this.state.mapType==2) {
-            heatMapComponent = (<Heatmap metaData={self.props.metaData}/>);
+            heatMapComponent = (
+                <Heatmap
+                    moleculeType={molecules[this.state.moleculeIndex]}
+                    metaData={self.props.metaData}
+                    realTimeData={self.props.realTimeData}
+                />);
         }
 
         return (

@@ -114,6 +114,7 @@ class AirApp extends React.Component {
     }
     
     return (
+      <div style={styles.root}>
       <div style={styles.mainPanel}>
         {liveMap}
         <Snackbar
@@ -122,6 +123,7 @@ class AirApp extends React.Component {
           autoHideDuration={4000}
           onRequestClose={this.handleSnackbarClose.bind(this)}
         />
+      </div>
       </div>
     );
   }
