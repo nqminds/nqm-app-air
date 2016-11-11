@@ -6,22 +6,27 @@ class MarkerCluster extends MapLayer {
     constructor(props) {
         super(props);
 
-        this._markers = {};    
+        this._markers = {};
     }
 
     componentWillMount() {
         let markers = [];
         let self = this;
+        let color = 'blue';
+        let mtext='';
+        let icontype = "plain";
+
         this.leafletElement = L.markerClusterGroup();
         
         if (!_.isEmpty(this.props.metaData)) {
             markers = _.map(this.props.metaData, (val,key)=>{
+
                 this._markers[val.SiteCode] = L.marker(new L.LatLng(val.Latitude, val.Longitude), {
                     title: val.LocalAuthorityName,
                     icon: new L.TextIcon({
-                        icontype: 'plain',
-                        text: '',
-                        color: 'blue',
+                        icontype: icontype,
+                        text: mtext,
+                        color: color,
                         id: val.SiteCode
                     })
                 });
@@ -39,7 +44,6 @@ class MarkerCluster extends MapLayer {
     }
 
     componentWillReceiveProps(nextProps) {
-
         _.forEach(nextProps.realTimeData, (val)=>{
             let color = 'blue';
             let mtext;
@@ -59,6 +63,10 @@ class MarkerCluster extends MapLayer {
 
     shouldComponentUpdate() {
         return false;
+    }
+
+    componentWillUnmount() {
+        this.leafletElement.clearLayers();
     }
 
     render() {

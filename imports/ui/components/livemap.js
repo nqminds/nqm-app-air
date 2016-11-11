@@ -6,14 +6,13 @@ https://github.com/Leaflet/Leaflet.markercluster#usage
 */
 
 import React from "react";
-import ReactDOM from 'react-dom';
-import Paper from 'material-ui/Paper';
 import Control from 'react-leaflet-control';
 import { Map, TileLayer, Marker, Popup, LayerGroup, ZoomControl } from 'react-leaflet';
 import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
 import MenuItem from 'material-ui/MenuItem';
 import DropDownMenu from 'material-ui/DropDownMenu';
+import SelectField from 'material-ui/SelectField';
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import DatePicker from 'material-ui/DatePicker';
 import MarkerCluster from "./markercluster"
@@ -21,6 +20,11 @@ import Chart from "./chart";
 
 const defaultData = [{ lat: 52.008778, lon: -0.771088}];
 const molecules = {1:'All', 2:'NO2', 3:'SO2', 4:'PM10', 5:'PM25', 6:'O3'};
+const styles = {
+  customWidth: {
+    width: 150,
+  },
+}
 
 class Livemap extends React.Component {
     constructor(props) {
@@ -53,9 +57,6 @@ class Livemap extends React.Component {
         });
     }
 
-    componentWillReceiveProps(nextProps) {
-    }
-    
     handleMoleculeChange(event, index, value){
         this.setState({
             moleculeIndex: value
@@ -63,7 +64,13 @@ class Livemap extends React.Component {
     }
 
     handleMapType(event, index, value){
+        let moleculeIndex = this.state.moleculeIndex;
+
+        if (this.state.mapType==2)
+            moleculeIndex = 1;
+
         this.setState({
+            moleculeIndex: moleculeIndex,
             mapType: value
         })
     }
@@ -90,42 +97,17 @@ class Livemap extends React.Component {
     render() {
         let self = this;
         let markerComponent = null;
+        let controlChart = null;
 
-        const style = {
-            height: 100,
-            width: 100,
-            margin: 20,
-            textAlign: 'center',
-            display: 'inline-block',
-        };
-
-        if (!_.isEmpty(self.props.metaData)) {
-            
-            markerComponent =
+        if (!_.isEmpty(self.props.metaData) && this.state.mapType==1) {
+            markerComponent = (
                 <MarkerCluster
                     moleculeType={molecules[this.state.moleculeIndex]}
                     metaData={self.props.metaData}
                     realTimeData={self.props.realTimeData}
                     onClickMarker={this._onClickMarker.bind(this)}
-                />
-        }
-
-        return (
-            <Map
-                center={this.state.centerPosition}
-                zoom={11}
-                scrollWheelZoom={false}
-                touchZoom={false}
-                maxBounds={null}
-                dragging={true}
-                zoomControl={false}
-            >
-                <TileLayer
-                    url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
-                    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                />
-                {markerComponent}
-                <ZoomControl position='bottomright' />
+                />);
+            controlChart = (
                 <Control position="topright" >
                     <div className="chartinfo">
                         <div className="flex-container-column">
@@ -157,10 +139,29 @@ class Livemap extends React.Component {
                             </div>
                         </div>
                     </div>
-                </Control>
+                </Control>);
+        }
+
+        return (
+            <Map
+                center={this.state.centerPosition}
+                zoom={11}
+                scrollWheelZoom={false}
+                touchZoom={false}
+                maxBounds={null}
+                dragging={true}
+                zoomControl={false}
+            >
+                <TileLayer
+                    url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
+                    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                />
+                <ZoomControl position='bottomright' />
+                {markerComponent}
+                {controlChart}
                 <Control position="topleft" >
                     <MuiThemeProvider muiTheme={this.context.muiTheme}>
-                        <div className="chartinfo">
+                        <div className="toolbarinfo">
                             <DropDownMenu value={this.state.moleculeIndex} onChange={this.handleMoleculeChange.bind(this)}>
                                 <MenuItem value={1} primaryText={molecules[1]} />
                                 <MenuItem value={2} primaryText={molecules[2]} />

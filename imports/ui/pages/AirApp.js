@@ -1,9 +1,7 @@
 "use strict";
 
 import React from "react";
-import ReactDOM from 'react-dom';
 import {Meteor} from "meteor/meteor";
-import { blue900, blue100 } from 'material-ui/styles/colors';
 import Snackbar from 'material-ui/Snackbar';
 import 'leaflet';
 import 'leaflet.markercluster';
@@ -29,7 +27,7 @@ class AirApp extends React.Component {
       airMetadata: {},
       chartType: "Line",
       siteCode: null,
-      timestampBounds: [0,0] 
+      timestampBounds: [0,0]
     };
   }
 
