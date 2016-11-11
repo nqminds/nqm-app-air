@@ -5,6 +5,7 @@ import {Meteor} from "meteor/meteor";
 import Snackbar from 'material-ui/Snackbar';
 import 'leaflet';
 import 'leaflet.markercluster';
+import 'leaflet.heat'
 import * as _ from "lodash";
 import TDXAPI from "nqm-api-tdx/client-api";
 

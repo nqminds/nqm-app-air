@@ -17,6 +17,7 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import DatePicker from 'material-ui/DatePicker';
 import MarkerCluster from "./markercluster"
 import Chart from "./chart";
+import Heatmap from "./heatmap"
 
 const defaultData = [{ lat: 52.008778, lon: -0.771088}];
 const molecules = {1:'All', 2:'NO2', 3:'SO2', 4:'PM10', 5:'PM25', 6:'O3'};
@@ -98,6 +99,7 @@ class Livemap extends React.Component {
         let self = this;
         let markerComponent = null;
         let controlChart = null;
+        let heatMapComponent = null;
 
         if (!_.isEmpty(self.props.metaData) && this.state.mapType==1) {
             markerComponent = (
@@ -140,6 +142,8 @@ class Livemap extends React.Component {
                         </div>
                     </div>
                 </Control>);
+        } else if (!_.isEmpty(self.props.metaData) && this.state.mapType==2) {
+            heatMapComponent = (<Heatmap metaData={self.props.metaData}/>);
         }
 
         return (
@@ -157,6 +161,7 @@ class Livemap extends React.Component {
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 />
                 <ZoomControl position='bottomright' />
+                {heatMapComponent}
                 {markerComponent}
                 {controlChart}
                 <Control position="topleft" >
