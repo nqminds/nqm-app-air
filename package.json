@@ -40,7 +40,6 @@
     "react-infinite": "^0.10.0",
     "react-komposer": "^1.13.1",
     "react-leaflet": "^1.0.0-rc.3",
-    "react-leaflet-control": "^1.1.2",
     "react-mounter": "^1.2.0",
     "react-tap-event-plugin": "^1.0.0",
     "stream": "0.0.2"

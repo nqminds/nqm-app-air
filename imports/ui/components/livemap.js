@@ -6,7 +6,6 @@ https://github.com/Leaflet/Leaflet.markercluster#usage
 */
 
 import React from "react";
-import Control from 'react-leaflet-control';
 import { Map, TileLayer, Marker, Popup, LayerGroup, ZoomControl } from 'react-leaflet';
 import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
@@ -18,6 +17,7 @@ import DatePicker from 'material-ui/DatePicker';
 import MarkerCluster from "./markercluster"
 import Chart from "./chart";
 import Heatmap from "./heatmap"
+import Control from './react-leaflet-control';
 
 const defaultData = [{ lat: 52.008778, lon: -0.771088}];
 const molecules = {1:'All', 2:'NO2', 3:'SO2', 4:'PM10', 5:'PM25', 6:'O3'};
