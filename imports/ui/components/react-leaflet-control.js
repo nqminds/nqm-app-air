@@ -4,16 +4,7 @@ import { Map } from 'leaflet';
 import Dumb from './Control.Dumb';
 import { render, unmountComponentAtNode } from 'react-dom';
 
-export default class Control extends MapControl {
-  /*
-  static propTypes = {
-    children: PropTypes.node,
-    map: PropTypes.instanceOf(Map),
-    popupContainer: PropTypes.object,
-    position: PropTypes.string
-  };
-  */
-  
+export default class Control extends MapControl {  
   constructor(props){
     super(props);
   }

@@ -1,14 +1,14 @@
-import { Control, DomUtil } from 'leaflet';
+import { Control, DomUtil } from "leaflet";
 
 export default Control.extend({
   options: {
-    className: '',
-    onOff: '',
+    className: "",
+    onOff: "",
     handleOff: function noop(){}
   },
 
   onAdd: function (map) {
-    return DomUtil.create('div', this.options.className);
+    return DomUtil.create("div", this.options.className);
   },
 
   onRemove: function (map) {

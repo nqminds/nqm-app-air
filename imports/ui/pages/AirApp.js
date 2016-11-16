@@ -2,14 +2,14 @@
 
 import React from "react";
 import {Meteor} from "meteor/meteor";
-import Snackbar from 'material-ui/Snackbar';
-import 'leaflet';
-import 'leaflet.markercluster';
-import 'leaflet.heat'
+import Snackbar from "material-ui/Snackbar";
+import "leaflet";
+import "leaflet.markercluster";
+import "leaflet.heat";
 import * as _ from "lodash";
 import TDXAPI from "nqm-api-tdx/client-api";
 
-import LivemapContainer from "./livemap-container"
+import LivemapContainer from "./livemap-container";
 import connectionManager from "../../api/manager/connection-manager";
 
 class AirApp extends React.Component {
@@ -92,11 +92,22 @@ class AirApp extends React.Component {
       }
     };
 
-    const resourceLoad = (this.state.siteCode!=null) ? true : false;
+    const resourceLoad = (this.state.siteCode!==null) ? true : false;
     const resourceOptions = { sort: { timestamp: 1 }};
-    const resourceFilter = {SiteCode: {$eq: this.state.siteCode},
-                                "$and":[{"timestamp":{"$gte":this.state.timestampBounds[0]}},
-                                        {"timestamp":{"$lte":this.state.timestampBounds[1]}}]};
+    const resourceFilter = {
+      SiteCode: {
+        $eq: this.state.siteCode
+      },
+      "$and": [{
+        "timestamp": {
+          "$gte": this.state.timestampBounds[0]
+        }
+      }, {
+        "timestamp": {
+          "$lte": this.state.timestampBounds[1]
+        }
+      }]
+    };
     
     let liveMap = null;
 

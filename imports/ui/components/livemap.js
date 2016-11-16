@@ -6,110 +6,106 @@ https://github.com/Leaflet/Leaflet.markercluster#usage
 */
 
 import React from "react";
-import { Map, TileLayer, Marker, Popup, LayerGroup, ZoomControl } from 'react-leaflet';
-import IconMenu from 'material-ui/IconMenu';
-import IconButton from 'material-ui/IconButton';
-import MenuItem from 'material-ui/MenuItem';
-import DropDownMenu from 'material-ui/DropDownMenu';
-import SelectField from 'material-ui/SelectField';
+import { Map, TileLayer, Marker, Popup, LayerGroup, ZoomControl } from "react-leaflet";
+import IconMenu from "material-ui/IconMenu";
+import IconButton from "material-ui/IconButton";
+import MenuItem from "material-ui/MenuItem";
+import DropDownMenu from "material-ui/DropDownMenu";
+import SelectField from "material-ui/SelectField";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import DatePicker from 'material-ui/DatePicker';
-import MarkerCluster from "./markercluster"
+import DatePicker from "material-ui/DatePicker";
+import MarkerCluster from "./markercluster";
 import Chart from "./chart";
-import Heatmap from "./heatmap"
-import Control from './react-leaflet-control';
+import Heatmap from "./heatmap";
+import Control from "./react-leaflet-control";
+import * as _ from "lodash";
 
 const defaultData = [{ lat: 52.008778, lon: -0.771088}];
-const molecules = {1:'All', 2:'NO2', 3:'SO2', 4:'PM10', 5:'PM25', 6:'O3'};
-const styles = {
-  customWidth: {
-    width: 150,
-  },
-}
+const molecules = {1:"All", 2:"NO2", 3:"SO2", 4:"PM10", 5:"PM25", 6:"O3"};
 
 class Livemap extends React.Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        let date = new Date();
+    let date = new Date();
         
-        this.markerID = null;
+    this.markerID = null;
 
-        date.setHours(0);
-        date.setMinutes(0);
-        date.setSeconds(0);
-        date.setMilliseconds(0);
+    date.setHours(0);
+    date.setMinutes(0);
+    date.setSeconds(0);
+    date.setMilliseconds(0);
 
-        this.state = {
-            centerPosition: L.latLng(defaultData[0], defaultData[1]),
-            moleculeIndex: 1,
-            mapType: 1,
-            filterDate: date,
-        };
-    }
+    this.state = {
+      centerPosition: L.latLng(defaultData[0], defaultData[1]),
+      moleculeIndex: 1,
+      mapType: 1,
+      filterDate: date,
+    };
+  }
 
-    componentWillMount() {
-        let bounds = L.latLngBounds(_.map(this.props.metaData, (val, key)=>{
-            return L.latLng(val.Latitude, val.Longitude);
-        }));
+  componentWillMount() {
+    let bounds = L.latLngBounds(_.map(this.props.metaData, (val, key)=>{
+      return L.latLng(val.Latitude, val.Longitude);
+    }));
 
-        this.setState({
-            centerPosition: bounds.getCenter()
-        });
-    }
+    this.setState({
+      centerPosition: bounds.getCenter()
+    });
+  }
 
-    handleMoleculeChange(event, index, value){
-        this.setState({
-            moleculeIndex: value
-        })
-    }
+  handleMoleculeChange(event, index, value){
+    this.setState({
+      moleculeIndex: value
+    });
+  }
 
-    handleMapType(event, index, value){
-        let moleculeIndex = this.state.moleculeIndex;
+  handleMapType(event, index, value){
+    let moleculeIndex = this.state.moleculeIndex;
 
-        if (this.state.mapType==2)
-            moleculeIndex = 1;
+    if (this.state.mapType===2)
+      moleculeIndex = 1;
 
-        this.setState({
-            moleculeIndex: moleculeIndex,
-            mapType: value
-        })
-    }
+    this.setState({
+      moleculeIndex: moleculeIndex,
+      mapType: value
+    });
+  }
 
-    handleDateChange(event, date) {
-        this.setState({
-            filterDate: date,
-        });
+  handleDateChange(event, date) {
+    this.setState({
+      filterDate: date,
+    });
 
-        if (this.markerID!=null)
-            this._onClickMarker(this.markerID);
-    }
+    if (this.markerID!==null)
+      this._onClickMarker(this.markerID);
+  }
 
-    _onClickMarker(id) {
-        const gte = this.state.filterDate.getTime();
-        const lte = gte + 24*60*60*1000;
+  _onClickMarker(id) {
+    const gte = this.state.filterDate.getTime();
+    const lte = gte + 24*60*60*1000;
 
-        this.markerID = id;
+    this.markerID = id;
 
-        if (this.state.moleculeIndex!=1)
-            this.props.onUpdatePlot(id, [gte, lte]);
-    }
+    if (this.state.moleculeIndex!==1)
+      this.props.onUpdatePlot(id, [gte, lte]);
+  }
 
-    render() {
-        let self = this;
-        let markerComponent = null;
-        let controlChart = null;
-        let heatMapComponent = null;
+  render() {
+    let self = this;
+    let markerComponent = null;
+    let controlChart = null;
+    let heatMapComponent = null;
 
-        if (!_.isEmpty(self.props.metaData) && this.state.mapType==1) {
-            markerComponent = (
+    if (!_.isEmpty(self.props.metaData) && this.state.mapType===1) {
+      markerComponent = (
                 <MarkerCluster
                     moleculeType={molecules[this.state.moleculeIndex]}
                     metaData={self.props.metaData}
                     realTimeData={self.props.realTimeData}
                     onClickMarker={this._onClickMarker.bind(this)}
                 />);
-            controlChart = (
+      controlChart = (
                 <Control position="topright" >
                     <div className="chartinfo">
                         <div className="flex-container-column">
@@ -142,16 +138,16 @@ class Livemap extends React.Component {
                         </div>
                     </div>
                 </Control>);
-        } else if (!_.isEmpty(self.props.metaData) && this.state.mapType==2) {
-            heatMapComponent = (
+    } else if (!_.isEmpty(self.props.metaData) && this.state.mapType===2) {
+      heatMapComponent = (
                 <Heatmap
                     moleculeType={molecules[this.state.moleculeIndex]}
                     metaData={self.props.metaData}
                     realTimeData={self.props.realTimeData}
                 />);
-        }
+    }
 
-        return (
+    return (
             <Map
                 center={this.state.centerPosition}
                 zoom={11}
@@ -188,14 +184,14 @@ class Livemap extends React.Component {
                     </MuiThemeProvider>
                 </Control>
             </Map>);
-    }
+  }
 }
 
 Livemap.propTypes = {
-    metaData: React.PropTypes.object.isRequired,
-    realTimeData: React.PropTypes.array.isRequired,
-    onUpdatePlot: React.PropTypes.func.isRequired,
-    data: React.PropTypes.array.isRequired
+  metaData: React.PropTypes.object.isRequired,
+  realTimeData: React.PropTypes.array.isRequired,
+  onUpdatePlot: React.PropTypes.func.isRequired,
+  data: React.PropTypes.array.isRequired
 };
 
 Livemap.contextTypes = {

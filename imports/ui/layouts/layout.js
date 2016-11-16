@@ -4,13 +4,13 @@ import {Meteor} from "meteor/meteor";
 import connectionManager from "../../api/manager/connection-manager";
 import Login from "../components/login";
 
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import getMuiTheme from "material-ui/styles/getMuiTheme";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import AppBar from "material-ui/AppBar";
 import IconButton from "material-ui/IconButton";
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import IconMenu from "material-ui/IconMenu";
+import MenuItem from "material-ui/MenuItem";
+import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
 
 const muiTheme = getMuiTheme({
   avatar: {
@@ -75,8 +75,8 @@ class Layout extends React.Component{
               iconButtonElement={
               <IconButton><MoreVertIcon /></IconButton>
               }
-              targetOrigin={{horizontal: 'right', vertical: 'top'}}
-              anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+              targetOrigin={{horizontal: "right", vertical: "top"}}
+              anchorOrigin={{horizontal: "right", vertical: "top"}}
             >
               <MenuItem primaryText="Settings" onClick = {this._onSettings.bind(this)}/>
               <MenuItem primaryText="Log out" onClick = {this._onLogout.bind(this)}/>

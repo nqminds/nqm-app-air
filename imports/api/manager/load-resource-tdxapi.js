@@ -11,36 +11,36 @@ function loadResourceData({
     options,
     load
 }, onData) {
-    if (load) {
-        const config = {
-            commandHost: Meteor.settings.public.commandHost,
-            queryHost: Meteor.settings.public.queryHost,
-            accessToken: connectionManager.authToken
-        };
-        const tdxApi = new TDXAPI(config);
+  if (load) {
+    const config = {
+      commandHost: Meteor.settings.public.commandHost,
+      queryHost: Meteor.settings.public.queryHost,
+      accessToken: connectionManager.authToken
+    };
+    const tdxApi = new TDXAPI(config);
 
-        filter = filter || "";
-        options = options || "";
+    filter = filter || "";
+    options = options || "";
 
-        console.log("loadResourceData tdxApi: ", resourceId, filter, options);
+    console.log("loadResourceData tdxApi: ", resourceId, filter, options);
 
-        tdxApi.getDatasetData(resourceId, filter, null, options, (err, response) => {
-            if (err) {
-                console.log("Failed to get data: ", err);
-                onData(err, {
-                    data: []
-                });
-            } else {
-                onData(null, {
-                    data: response.data
-                });
-            }
+    tdxApi.getDatasetData(resourceId, filter, null, options, (err, response) => {
+      if (err) {
+        console.log("Failed to get data: ", err);
+        onData(err, {
+          data: []
         });
-    } else {
+      } else {
         onData(null, {
-            data: []
+          data: response.data
         });
-    }
+      }
+    });
+  } else {
+    onData(null, {
+      data: []
+    });
+  }
 }
 
 export default loadResourceData;

@@ -60,11 +60,12 @@ class ConnectionManager {
 
     // Initialise the HTTP request with the given credentials
     var options = {
-      headers: { 
-        authorization: "Basic " + shareId + ":" + password },
-        data: {
-          grant_type: "client_credentials",          
-        }
+      headers: {
+        authorization: "Basic " + shareId + ":" + password
+      },
+      data: {
+        grant_type: "client_credentials",
+      }
     };
 
     // Get an auth token from the TDX token endpoint.

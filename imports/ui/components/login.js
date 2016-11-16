@@ -3,7 +3,7 @@ import React from "react";
 import TextField from "material-ui/TextField";
 import RaisedButton from "material-ui/RaisedButton";
 import {RadioButton, RadioButtonGroup} from "material-ui/RadioButton";
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from "material-ui/Card";
 
 class Login extends React.Component {
   constructor(props) {
@@ -93,6 +93,6 @@ class Login extends React.Component {
 
 Login.propTypes = {
   onEnter: React.PropTypes.func.isRequired
-}
+};
 
 export default Login;
